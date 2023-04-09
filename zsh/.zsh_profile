@@ -12,9 +12,19 @@ addToPathFront() {
     fi
 }
 
+
 addToPathFront $HOME/.local/.npm-global/bin
 addToPathFront $HOME/.yarn/bin
 addToPathFront $HOME/.cargo/bin
 addToPathFront $HOME/.rustup
 addToPathFront $HOME/.local/scripts
+
+export DOTFILES=~/.dotfiles
+commitDotFiles() {
+    pushd $DOTFILES
+    git add .
+    git commit -m "$(curl -s whatthecommit.com/index.txt)"
+    git push origin master
+    popd
+}
 

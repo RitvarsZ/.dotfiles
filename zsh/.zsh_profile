@@ -23,7 +23,7 @@ export DOTFILES=~/.dotfiles
 commitDotFiles() {
     pushd $DOTFILES
     git add .
-    git commit -m "$(curl -s whatthecommit.com/index.txt)"
+    git commit -m "$(curl -s https://whatthecommit.com/index.txt)"
     git push origin master
     popd
 }

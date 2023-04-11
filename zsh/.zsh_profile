@@ -29,3 +29,6 @@ commitDotFiles() {
 }
 
 
+export N_PREFIX=$HOME/.n
+addToPath $N_PREFIX/bin
+

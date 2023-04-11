@@ -39,3 +39,22 @@ vim.diagnostic.config({
     virtual_text = true
 })
 
+local nvim_lsp = require('lspconfig')
+
+nvim_lsp.intelephense.setup {
+    on_init = function(client)
+    local path = client.workspace_folders[1].name
+
+        if path == '~/projects/kirmada-deployments' then
+            client.config.settings["intelephense"].environment.documentRoot = "web-backend/public"
+            client.config.settings["intelephense"].environment.phpVersion = "7.4.29"
+        end
+
+        client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+        return true
+    end,
+    -- NOTE: you must spell out the config you wanna change in `on_init` inside `settings`, like:
+    settings = {
+        ['rust-analyzer'] = { checkOnSave = { overrideCommand = {} } } -- here
+    }
+}

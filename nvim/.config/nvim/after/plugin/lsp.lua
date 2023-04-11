@@ -48,6 +48,7 @@ nvim_lsp.intelephense.setup {
         if path == '~/projects/kirmada-deployments' then
             client.config.settings["intelephense"].environment.documentRoot = "web-backend/public"
             client.config.settings["intelephense"].environment.phpVersion = "7.4.29"
+            client.config.settings["intelephense"].completion.fullyQualifyGlobalConstantsAndFunctions = true
         end
 
         client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })

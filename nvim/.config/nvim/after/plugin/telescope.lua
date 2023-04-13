@@ -7,5 +7,8 @@ vim.keymap.set('n', '<C-p>', function()
 end, {})
 
 vim.keymap.set('n', '<leader>ps', function()
-    builtin.grep_string({ search = vim.fn.input("Grep > ") })
+    builtin.grep_string({
+        search = vim.fn.input("Grep > "),
+        search_dirs = vim.fn['getcwd']() .. "/**"
+    })
 end)

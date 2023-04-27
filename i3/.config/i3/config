@@ -10,8 +10,10 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-set $monLeft "HDMI-A-0"
-set $monRight "DisplayPort-2"
+# set $monLeft "HDMI-A-0"
+# set $monRight "DisplayPort-2"
+set $monLeft "eDP-1"
+set $monRight "HDMI-1"
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -51,6 +53,7 @@ bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 # Application shortcuts
 bindsym $mod+e exec nautilus
 bindsym $mod+b exec google-chrome
+bindsym Mod4+Shift+s exec --no-startup-id shutter -s
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -209,3 +212,4 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 # Suspend
 bindsym $mod+Shift+period exec systemctl suspend
 
+assign [class="Electron"] workspace 1

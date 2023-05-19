@@ -202,6 +202,7 @@ bar {
 # CUSTOM KEYS START
 # ------------------------------------------
 exec --no-startup-id nm-applet
+exec --no-startup-id nitrogen --restore
 
 # FKeys
 # Pulse Audio controls

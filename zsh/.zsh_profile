@@ -34,4 +34,5 @@ addToPath $N_PREFIX/bin
 
 bindkey -s ^f "tmux-sessionizer\n"
 alias dcu="docker compose up"
+alias KILLEM="docker kill $(docker ps -q)"
 # bindkey -s ^i "tmux-cht.sh\n"

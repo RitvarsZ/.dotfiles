@@ -34,5 +34,9 @@ addToPath $N_PREFIX/bin
 
 bindkey -s ^f "tmux-sessionizer\n"
 alias dcu="docker compose up"
-alias KILLEM="docker kill $(docker ps -q)"
+alias dc="docker compose"
+alias KILLEM='docker kill $(docker ps -q)'
 # bindkey -s ^i "tmux-cht.sh\n"
+
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+

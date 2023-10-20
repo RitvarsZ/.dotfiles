@@ -33,7 +33,6 @@ return require('packer').startup(function(use)
             "MunifTanjim/nui.nvim",
         }
     }
-    use{"romgrk/barbar.nvim"}
 
     use("lukas-reineke/indent-blankline.nvim")
 

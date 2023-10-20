@@ -34,6 +34,7 @@ export N_PREFIX=$HOME/.n
 addToPath $N_PREFIX/bin
 
 bindkey -s ^f "tmux-sessionizer\n"
+alias vim="nvim"
 alias dcu="docker compose up"
 alias dc="docker compose"
 alias KILLEM='docker kill $(docker ps -q)'

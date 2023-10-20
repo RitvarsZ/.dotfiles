@@ -18,6 +18,7 @@ addToPathFront $HOME/.yarn/bin
 addToPathFront $HOME/.cargo/bin
 addToPathFront $HOME/.rustup
 addToPathFront $HOME/.local/scripts
+addToPathFront $HOME/.config/lsp/lua-language-server/bin
 
 export DOTFILES=~/.dotfiles
 commitDotFiles() {

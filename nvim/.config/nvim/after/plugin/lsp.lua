@@ -1,61 +1,90 @@
-local lsp = require("lsp-zero")
+local lsp_zero = require('lsp-zero')
 
-lsp.preset("recommended")
-
-lsp.ensure_installed({
-  'tsserver',
-  'rust_analyzer',
-})
-
--- Fix Undefined global 'vim'
-lsp.configure('lua-language-server', {
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { 'vim' }
-            }
-        }
-    }
-})
-
-lsp.on_attach(function(client, bufnr)
-  local opts = {buffer = bufnr, remap = false}
-
-  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-  vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
-  vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-  vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
-  vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
-  vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
-  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+lsp_zero.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup()
-
-vim.diagnostic.config({
-    virtual_text = true
+require('mason').setup({})
+require('mason-lspconfig').setup({
+    ensure_installed = {'lua_ls'},
+    handlers = {
+        lsp_zero.default_setup,
+        require('lspconfig').lua_ls.setup({
+            settings = {
+                Lua = {
+                    diagnostics = {
+                        globals = {'vim'},
+                    },
+                },
+            },
+        }),
+        require('lspconfig').volar.setup({}),
+        require('lspconfig').eslint.setup({}),
+    },
 })
 
-local nvim_lsp = require('lspconfig')
+lsp_zero.set_sign_icons({
+  error = '✘',
+  warn = '▲',
+  hint = '⚑',
+  info = ''
+})
 
-nvim_lsp.intelephense.setup {
-    on_init = function(client)
-    local path = client.workspace_folders[1].name
+vim.diagnostic.config({
+  virtual_text = true,
+  severity_sort = true,
+  float = {
+    style = 'minimal',
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
+})
 
-        if path == '~/projects/kirmada-deployments' then
-            client.config.settings["intelephense"].environment.documentRoot = "web-backend/public"
-            client.config.settings["intelephense"].environment.phpVersion = "7.4.29"
-            client.config.settings["intelephense"].completion.fullyQualifyGlobalConstantsAndFunctions = true
-        end
+local cmp = require('cmp')
+local cmp_action = lsp_zero.cmp_action()
+local cmp_format = lsp_zero.cmp_format()
 
-        client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-        return true
-    end,
-    -- NOTE: you must spell out the config you wanna change in `on_init` inside `settings`, like:
-    settings = {
-        ['rust-analyzer'] = { checkOnSave = { overrideCommand = {} } } -- here
-    }
-}
+require('luasnip.loaders.from_vscode').lazy_load()
+
+vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+
+cmp.setup({
+  formatting = cmp_format,
+  preselect = 'item',
+  completion = {
+    completeopt = 'menu,menuone,noinsert'
+  },
+  window = {
+    documentation = cmp.config.window.bordered(),
+  },
+  sources = {
+    {name = 'path'},
+    {name = 'nvim_lsp'},
+    {name = 'nvim_lua'},
+    {name = 'buffer', keyword_length = 3},
+    {name = 'luasnip', keyword_length = 2},
+  },
+  mapping = cmp.mapping.preset.insert({
+    -- confirm completion item
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+    -- toggle completion menu
+    ['<C-e>'] = cmp_action.toggle_completion(),
+
+    -- tab complete
+    ['<Tab>'] = cmp_action.tab_complete(),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+
+    -- navigate between snippet placeholder
+    ['<C-d>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+    -- scroll documentation window
+    ['<C-f>'] = cmp.mapping.scroll_docs(5),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-5),
+  }),
+})

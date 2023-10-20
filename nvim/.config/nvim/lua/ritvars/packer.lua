@@ -5,12 +5,13 @@ vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
     -- Packer can manage itself
-    use 'wbthomason/packer.nvim'
+    use'wbthomason/packer.nvim'
 
-    use {
+    use{
         'nvim-telescope/telescope.nvim', tag = '0.1.4',
-        -- or                            , branch = '0.1.x',
-        requires = { {'nvim-lua/plenary.nvim'} }
+        requires = {
+            {'nvim-lua/plenary.nvim'}
+        }
     }
 
     use({'rose-pine/neovim', as = 'rose-pine'})
@@ -19,30 +20,40 @@ return require('packer').startup(function(use)
     use("nvim-treesitter/playground")
 
     use("theprimeagen/harpoon")
-    use("mbbill/undotree")
     use("tpope/vim-fugitive")
-    use {'lewis6991/gitsigns.nvim'}
+    use{'lewis6991/gitsigns.nvim'}
 
-    use ('nvim-lualine/lualine.nvim')
+    use('nvim-lualine/lualine.nvim')
+    use{
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons",
+            "MunifTanjim/nui.nvim",
+        }
+    }
+    use{"romgrk/barbar.nvim"}
+
     use("lukas-reineke/indent-blankline.nvim")
 
     use{
         'VonHeikemen/lsp-zero.nvim',
-        branch = 'v1.x',
+        branch = 'v3.x',
         requires = {
             -- LSP Support
-            {'neovim/nvim-lspconfig'},
             {'williamboman/mason.nvim'},
             {'williamboman/mason-lspconfig.nvim'},
+            {'neovim/nvim-lspconfig'},
             {'j-hui/fidget.nvim', tag = 'legacy'},
 
 
             -- Autocompletion
             {'hrsh7th/nvim-cmp'},
+            {'hrsh7th/cmp-nvim-lsp'},
             {'hrsh7th/cmp-buffer'},
             {'hrsh7th/cmp-path'},
             {'saadparwaiz1/cmp_luasnip'},
-            {'hrsh7th/cmp-nvim-lsp'},
             {'hrsh7th/cmp-nvim-lua'},
 
             -- Snippets
@@ -53,4 +64,5 @@ return require('packer').startup(function(use)
 
     use{'github/copilot.vim'}
     use{'numToStr/Comment.nvim'}
+    use{'m4xshen/autoclose.nvim'}
 end)

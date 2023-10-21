@@ -11,10 +11,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 vim.keymap.set("n", "Q", "<nop>")
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
@@ -30,5 +30,14 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader><leader>", function()
     vim.cmd("so")
+end)
+
+-- Open sidebar if hidden, focus if visible and close if active.
+vim.keymap.set("n", "\\", function()
+    if string.match(vim.api.nvim_buf_get_name(0), "/neo%-tree ") then
+        vim.cmd(":Neotree toggle")
+    else
+        vim.cmd(":Neotree focus")
+    end
 end)
 

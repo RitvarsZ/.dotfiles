@@ -1,27 +1,37 @@
 local lsp_zero = require('lsp-zero')
+local nlspsettings = require("nlspsettings")
 
-lsp_zero.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({buffer = bufnr})
+-- Per project settings loader
+nlspsettings.setup({
+  config_home = vim.fn.stdpath('config') .. '/nlsp-settings',
+  local_settings_dir = ".nlsp-settings",
+  local_settings_root_markers_fallback = { '.git' },
+  append_default_schemas = true,
+  loader = 'json'
+})
+
+lsp_zero.on_attach(function(_client, bufnr)
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- see :help lsp-zero-keybindings
+    -- to learn the available actions
+    lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = {'lua_ls'},
+    ensure_installed = {'lua_ls', 'volar', 'eslint', 'intelephense', 'tsserver'},
     handlers = {
         lsp_zero.default_setup,
-        require('lspconfig').lua_ls.setup({
-            settings = {
-                Lua = {
-                    diagnostics = {
-                        globals = {'vim'},
-                    },
-                },
-            },
-        }),
+        lua_ls = function()
+          local lua_opts = lsp_zero.nvim_lua_ls()
+          require('lspconfig').lua_ls.setup(lua_opts)
+        end,
         require('lspconfig').volar.setup({}),
         require('lspconfig').eslint.setup({}),
+        require('lspconfig').intelephense.setup({}),
+        require('lspconfig').tsserver.setup({}),
     },
 })
 

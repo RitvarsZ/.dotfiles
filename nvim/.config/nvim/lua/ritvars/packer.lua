@@ -14,7 +14,10 @@ return require('packer').startup(function(use)
         }
     }
 
+    -- colors
     use({'rose-pine/neovim', as = 'rose-pine'})
+    use({"olimorris/onedarkpro.nvim"})
+    use({"folke/tokyonight.nvim"})
 
     use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"})
     use("nvim-treesitter/playground")
@@ -44,8 +47,8 @@ return require('packer').startup(function(use)
             {'williamboman/mason.nvim'},
             {'williamboman/mason-lspconfig.nvim'},
             {'neovim/nvim-lspconfig'},
+            {'tamago324/nlsp-settings.nvim'},
             {'j-hui/fidget.nvim', tag = 'legacy'},
-
 
             -- Autocompletion
             {'hrsh7th/nvim-cmp'},
@@ -61,7 +64,6 @@ return require('packer').startup(function(use)
         }
     }
 
-    use{'github/copilot.vim'}
     use{'numToStr/Comment.nvim'}
     use{'m4xshen/autoclose.nvim'}
 end)

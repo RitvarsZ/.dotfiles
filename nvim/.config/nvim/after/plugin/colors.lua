@@ -1,7 +1,5 @@
-function ColorMeBby(color)
-	color = color or 'rose-pine'
-	vim.cmd.colorscheme(color)
-end
+require('rose-pine').setup{}
+require('onedarkpro').setup{}
 
-ColorMeBby()
+vim.cmd('colorscheme tokyonight-night')
 

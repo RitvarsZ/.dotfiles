@@ -1,4 +1,5 @@
 vim.cmd([[nnoremap \ :Neotree toggle<cr>]])
+vim.cmd([[nnoremap <C-\> :Neotree toggle action=show<cr>]])
 
 require('neo-tree').setup{
     source_selector = {

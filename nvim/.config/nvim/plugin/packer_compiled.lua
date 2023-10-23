@@ -189,6 +189,11 @@ _G.packer_plugins = {
     path = "/home/ritvars/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["nvim-treesitter-context"] = {
+    loaded = true,
+    path = "/home/ritvars/.local/share/nvim/site/pack/packer/start/nvim-treesitter-context",
+    url = "https://github.com/nvim-treesitter/nvim-treesitter-context"
+  },
   ["nvim-web-devicons"] = {
     loaded = true,
     path = "/home/ritvars/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
@@ -219,10 +224,20 @@ _G.packer_plugins = {
     path = "/home/ritvars/.local/share/nvim/site/pack/packer/start/rose-pine",
     url = "https://github.com/rose-pine/neovim"
   },
+  ["symbols-outline.nvim"] = {
+    loaded = true,
+    path = "/home/ritvars/.local/share/nvim/site/pack/packer/start/symbols-outline.nvim",
+    url = "https://github.com/simrat39/symbols-outline.nvim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/ritvars/.local/share/nvim/site/pack/packer/start/telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
+  },
+  ["tokyonight.nvim"] = {
+    loaded = true,
+    path = "/home/ritvars/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
+    url = "https://github.com/folke/tokyonight.nvim"
   },
   ["vim-fugitive"] = {
     loaded = true,

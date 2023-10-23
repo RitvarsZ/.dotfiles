@@ -11,3 +11,6 @@ vim.keymap.set('n', '<C-p>', function()
     })
 end, {})
 
+vim.keymap.set('n', '<leader>ps', function()
+    builtin.live_grep()
+end, {})

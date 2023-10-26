@@ -16,7 +16,7 @@ return require('packer').startup(function(use)
 
     -- colors
     use({'rose-pine/neovim', as = 'rose-pine'})
-    use({"olimorris/onedarkpro.nvim"})
+    use({"navarasu/onedark.nvim"})
     use({"folke/tokyonight.nvim"})
 
     use("nvim-treesitter/nvim-treesitter", {run = ":TSUpdate"})

@@ -1,5 +1,7 @@
 require('rose-pine').setup{}
-require('onedarkpro').setup{}
+require('onedark').setup{
+    style = 'warmer'
+}
 
-vim.cmd('colorscheme tokyonight-night')
+vim.cmd('colorscheme onedark')
 

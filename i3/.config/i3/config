@@ -10,10 +10,10 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-set $monLeft "eDP-1"
-set $monRight "HDMI-1"
-# set $monLeft "DP-2"
-# set $monRight "DP-0"
+# set $monLeft "eDP-1"
+# set $monRight "HDMI-1"
+set $monRight "DP-2"
+set $monLeft "DP-0"
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.

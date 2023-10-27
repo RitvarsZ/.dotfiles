@@ -68,7 +68,7 @@ return require('packer').startup(function(use)
     use{'numToStr/Comment.nvim'}
     use{'m4xshen/autoclose.nvim'}
 
-    use {
+    use{
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
         event = "InsertEnter",
@@ -76,4 +76,7 @@ return require('packer').startup(function(use)
             require("copilot").setup({})
         end,
     }
+
+    use{"tpope/vim-sleuth"}
 end)
+

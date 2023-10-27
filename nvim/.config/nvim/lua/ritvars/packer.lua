@@ -67,4 +67,13 @@ return require('packer').startup(function(use)
 
     use{'numToStr/Comment.nvim'}
     use{'m4xshen/autoclose.nvim'}
+
+    use {
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        event = "InsertEnter",
+        config = function()
+            require("copilot").setup({})
+        end,
+    }
 end)

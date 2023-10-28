@@ -1,0 +1,12 @@
+[user]
+	email = ritvars.zvejnieks@applyit.lv
+	name = Ritvars Zvejnieks
+[alias]
+    co = checkout
+    cob = checkout -b
+    s = status
+    pl = pull
+    ps = push
+    f = fetch
+    fr = fetch --recurse-submodules
+

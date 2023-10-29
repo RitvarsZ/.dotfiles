@@ -11,12 +11,14 @@ nlspsettings.setup({
 })
 
 lsp_zero.on_attach(function(_client, bufnr)
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
     lsp_zero.default_keymaps({buffer = bufnr})
+
+    local opts = {buffer = bufnr, remap = false}
+    vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 end)
 
 require('mason').setup({})
@@ -28,10 +30,6 @@ require('mason-lspconfig').setup({
           local lua_opts = lsp_zero.nvim_lua_ls()
           require('lspconfig').lua_ls.setup(lua_opts)
         end,
-        require('lspconfig').volar.setup({}),
-        require('lspconfig').eslint.setup({}),
-        require('lspconfig').intelephense.setup({}),
-        require('lspconfig').tsserver.setup({}),
     },
 })
 
@@ -75,8 +73,8 @@ cmp.setup({
     {name = 'path'},
     {name = 'nvim_lsp'},
     {name = 'nvim_lua'},
-    {name = 'buffer', keyword_length = 3},
     {name = 'luasnip', keyword_length = 2},
+    {name = 'buffer', keyword_length = 3},
   },
   mapping = cmp.mapping.preset.insert({
     -- confirm completion item

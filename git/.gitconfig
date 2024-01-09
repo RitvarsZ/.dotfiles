@@ -10,3 +10,5 @@
     f = fetch
     fr = fetch --recurse-submodules
 
+[core]
+	editor = nvim

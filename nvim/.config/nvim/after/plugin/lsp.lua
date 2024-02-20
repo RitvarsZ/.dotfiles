@@ -23,14 +23,28 @@ lsp_zero.on_attach(function(_client, bufnr)
     vim.keymap.set('n', '<space>[', vim.diagnostic.goto_prev)
 end)
 
-require('mason').setup({})
-require('mason-lspconfig').setup({
-    ensure_installed = {'lua_ls', 'volar', 'eslint', 'intelephense', 'tsserver'},
+require("mason").setup({})
+require("mason-lspconfig").setup({
+    ensure_installed = {
+      "lua_ls",
+      "volar",
+      "eslint",
+      "intelephense",
+      "tsserver",
+      "rust_analyzer",
+      "marksman",
+      "html",
+      "emmet_language_server",
+      "dockerls",
+      "docker_compose_language_service",
+      "clangd",
+      "bashls",
+    },
     handlers = {
         lsp_zero.default_setup,
         lua_ls = function()
           local lua_opts = lsp_zero.nvim_lua_ls()
-          require('lspconfig').lua_ls.setup(lua_opts)
+          require("lspconfig").lua_ls.setup(lua_opts)
         end,
     },
 })

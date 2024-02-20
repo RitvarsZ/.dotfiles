@@ -164,7 +164,7 @@ exec --no-startup-id nitrogen --restore
 # Suspend
 bindsym $mod+Shift+period exec systemctl suspend
 
-assign [class="Electron"] workspace 1
+assign [class="Electron"] workspace 6
 
 # include ~/.config/i3/dualmon.conf
 include ~/.config/i3/triplemon.conf

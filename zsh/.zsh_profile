@@ -31,7 +31,7 @@ commitDotFiles() {
 
 
 export N_PREFIX=$HOME/.n
-addToPath $N_PREFIX/bin
+addToPathFront $N_PREFIX/bin
 
 bindkey -s ^f "tmux-sessionizer\n"
 alias vim="nvim"

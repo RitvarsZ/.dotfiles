@@ -16,6 +16,12 @@ require('neo-tree').setup{
         },
     },
     filesystem = {
+        window = {
+            mappings = {
+               -- disable fuzzy finder
+               ["/"] = "noop",
+            },
+        },
         follow_current_file = {
             enabled = true,
             leave_dirs_open = false,

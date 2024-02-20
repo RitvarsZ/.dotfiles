@@ -1,4 +1,4 @@
-require('rose-pine').setup{}
+-- require('rose-pine').setup{}
 require('onedark').setup{
     style = 'warmer'
 }

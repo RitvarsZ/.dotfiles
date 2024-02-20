@@ -16,10 +16,6 @@ require('neo-tree').setup{
         },
     },
     filesystem = {
-        visible = true,
-        hide_dotfiles = false,
-        hide_gitignored = false,
-        hide_hidden = false,
         follow_current_file = {
             enabled = true,
             leave_dirs_open = false,
@@ -27,6 +23,8 @@ require('neo-tree').setup{
         hijack_netrw_behavior = "open_default",
         filtered_items = {
             visible = true,
+            hide_dotfiles = false,
+            hide_gitignored = false,
         },
     },
     buffers = {

@@ -33,5 +33,14 @@ require('neo-tree').setup{
             leave_dirs_open = false,
         },
     },
+    event_handlers = {
+        {
+            event = "neo_tree_window_after_open",
+            handler = function(args)
+                -- @see remap.lua
+                Neotree_last_source = args.source
+            end,
+        }
+    }
 }
 

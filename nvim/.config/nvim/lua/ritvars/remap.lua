@@ -34,10 +34,12 @@ end)
 
 -- Open sidebar if hidden, focus if visible and close if active.
 vim.keymap.set("n", "\\", function()
-    if string.match(vim.api.nvim_buf_get_name(0), "/neo%-tree ") then
-        vim.cmd(":Neotree toggle")
+    local current_buf_name = vim.api.nvim_buf_get_name(0)
+    if string.match(current_buf_name, "/neo%-tree ") then
+        print(Neotree_last_source)
+        vim.cmd(":Neotree toggle source=" .. (Neotree_last_source or "filesystem"))
     else
-        vim.cmd(":Neotree focus")
+        vim.cmd(":Neotree focus source=" .. (Neotree_last_source or "filesystem"))
     end
 end)
 

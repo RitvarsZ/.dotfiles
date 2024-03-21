@@ -37,4 +37,8 @@ vim.g.netrw_banner = 0
 
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.foldenable = true
+vim.o.foldlevel=20
+vim.o.foldmethod='expr'
+-- set vim.o.foldexpr=nvim_treesitter#foldexpr()
 

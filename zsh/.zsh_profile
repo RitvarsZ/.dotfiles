@@ -42,4 +42,5 @@ alias updatemebby='sudo apt update && sudo apt upgrade'
 # bindkey -s ^i "tmux-cht.sh\n"
 
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+export KUBE_EDITOR=nvim
 

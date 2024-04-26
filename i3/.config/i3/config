@@ -167,5 +167,6 @@ bindsym $mod+Shift+period exec systemctl suspend
 assign [class="Electron"] workspace 1
 assign [class="vite-electron-builder"] workspace 1
 
-include ~/.config/i3/dualmon.conf
+include ~/.config/i3/singlemon.conf
+# include ~/.config/i3/dualmon.conf
 # include ~/.config/i3/triplemon.conf

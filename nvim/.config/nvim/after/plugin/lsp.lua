@@ -27,7 +27,7 @@ require("mason").setup({})
 require("mason-lspconfig").setup({
     ensure_installed = {
       "lua_ls",
-      "volar",
+      "volar@1.8.0",
       "eslint",
       "intelephense",
       "tsserver",

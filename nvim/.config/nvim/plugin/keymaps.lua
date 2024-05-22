@@ -29,17 +29,12 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader><leader>", function()
-    vim.cmd("so")
+  vim.cmd("so")
 end)
 
--- Open sidebar if hidden, focus if visible and close if active.
-vim.keymap.set("n", "\\", function()
-    local current_buf_name = vim.api.nvim_buf_get_name(0)
-    if string.match(current_buf_name, "/neo%-tree ") then
-        print(Neotree_last_source)
-        vim.cmd(":Neotree toggle source=" .. (Neotree_last_source or "filesystem"))
-    else
-        vim.cmd(":Neotree focus source=" .. (Neotree_last_source or "filesystem"))
-    end
-end)
+-- These mappings control the size of splits (height/width)
+vim.keymap.set("n", "<M-n>", "<c-w>5<")
+vim.keymap.set("n", "<M-.>", "<c-w>5>")
+vim.keymap.set("n", "<M-m>", "<C-W>+")
+vim.keymap.set("n", "<M-,>", "<C-W>-")
 

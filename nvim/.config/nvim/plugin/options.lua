@@ -1,5 +1,6 @@
-vim.opt.nu = true
+vim.opt.number = true
 vim.opt.relativenumber = true
+vim.g.netrw_banner = 0
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -7,7 +8,6 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.opt.smartindent = true
-
 vim.opt.wrap = false
 
 vim.opt.swapfile = false
@@ -31,14 +31,13 @@ vim.o.timeoutlen = 500
 
 vim.opt.colorcolumn = "80"
 
-vim.g.mapleader = " "
-
-vim.g.netrw_banner = 0
-
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.foldenable = true
 vim.o.foldlevel=20
 vim.o.foldmethod='expr'
--- set vim.o.foldexpr=nvim_treesitter#foldexpr()
+vim.o.foldexpr='nvim_treesitter#foldexpr()'
+
+vim.opt.inccommand = "split"
+
 

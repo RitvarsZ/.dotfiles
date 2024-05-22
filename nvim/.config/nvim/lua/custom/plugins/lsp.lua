@@ -55,6 +55,7 @@ return {
             Lua = {}
           }
         },
+        intelephense = true,
         rust_analyzer = true,
         cssls = true,
         marksman = true,
@@ -163,13 +164,6 @@ return {
           [vim.diagnostic.severity.HINT] = '⚑',
           [vim.diagnostic.severity.INFO] = '',
         },
-        -- linehl = {
-        --   [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
-        -- },
-        -- numhl = {
-        --   [vim.diagnostic.severity.WARN] = 'WarningMsg',
-        -- },
-        -- asdf
       },
       virtual_text = {
         prefix = ''

@@ -163,12 +163,13 @@ return {
           [vim.diagnostic.severity.HINT] = '⚑',
           [vim.diagnostic.severity.INFO] = '',
         },
-        linehl = {
-          [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
-        },
-        numhl = {
-          [vim.diagnostic.severity.WARN] = 'WarningMsg',
-        },
+        -- linehl = {
+        --   [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+        -- },
+        -- numhl = {
+        --   [vim.diagnostic.severity.WARN] = 'WarningMsg',
+        -- },
+        -- asdf
       },
       virtual_text = {
         prefix = ''

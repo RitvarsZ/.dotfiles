@@ -38,19 +38,7 @@ return {
       },
       mapping = cmp.mapping.preset.insert({
         -- confirm completion item
-        ['<CR>'] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            if luasnip.expandable() then
-              luasnip.expand()
-            else
-              cmp.confirm({
-                select = true,
-              })
-            end
-          else
-            fallback()
-          end
-        end),
+        ['<CR>'] = cmp.mapping.confirm({select = false}),
 
         -- toggle completion menu
         ['<C-e>'] = cmp.mapping(function()
@@ -90,7 +78,6 @@ return {
             fallback()
           end
         end, {'i', 's'}),
-
         ['<C-b>'] = cmp.mapping(function(fallback)
           if luasnip.jumpable(-1) then
             luasnip.jump(-1)

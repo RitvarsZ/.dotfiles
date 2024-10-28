@@ -164,8 +164,9 @@ exec --no-startup-id nitrogen --restore
 # Suspend
 bindsym $mod+Shift+period exec systemctl suspend
 
-assign [class="Electron"] workspace 1
-assign [class="vite-electron-builder"] workspace 1
+assign [instance="kirmada"] workspace 6
+no_focus [instance="kirmada"]
+for_window [instance="kirmada"] focus_on_window_activation none
 
 # include ~/.config/i3/singlemon.conf
 # include ~/.config/i3/dualmon.conf

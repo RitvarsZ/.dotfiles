@@ -23,6 +23,7 @@ return {
         .. '/node_modules/@vue/language-server'
 
       local servers = {
+        eslint = true,
         bashls = true,
         lua_ls = {
           on_init = function(client)
@@ -61,7 +62,7 @@ return {
         marksman = true,
 
         -- Probably want to disable formatting for this lang server
-        tsserver = {
+        ts_ls = {
           init_options = {
             plugins = {
               {
@@ -111,7 +112,7 @@ return {
         "volar",
         "eslint",
         "intelephense",
-        "tsserver",
+        "ts_ls",
         "rust_analyzer",
         "marksman",
         "html",

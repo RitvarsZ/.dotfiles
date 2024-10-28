@@ -23,7 +23,14 @@ return {
         .. '/node_modules/@vue/language-server'
 
       local servers = {
-        eslint = true,
+        eslint = {
+          on_attach = function(client, bufnr)
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = bufnr,
+              command = "EslintFixAll",
+            })
+          end,
+        },
         bashls = true,
         lua_ls = {
           on_init = function(client)

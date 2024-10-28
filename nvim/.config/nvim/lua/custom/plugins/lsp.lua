@@ -128,6 +128,7 @@ return {
         "docker_compose_language_service",
         "clangd",
         "bashls",
+        "phpstan",
       }
 
       vim.list_extend(ensure_installed, servers_to_install)

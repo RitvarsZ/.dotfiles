@@ -15,14 +15,18 @@ return {
       local lspconfig = require "lspconfig"
 
       require("mason").setup()
-      -- This is for tsserver
+      -- This is for ts_ls
       -- see: https://github.com/vuejs/language-tools
       -- * god i love js...
       local mason_registry = require('mason-registry')
-      local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() 
+      local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path()
         .. '/node_modules/@vue/language-server'
 
       local servers = {
+        -- Lint project and open problems in quickfix list :)
+        -- :set makeprg=npx\ eslint\ -f\ unix\ .
+        -- :make
+        -- :copen
         eslint = {
           on_attach = function(client, bufnr)
             vim.api.nvim_create_autocmd("BufWritePre", {
@@ -81,7 +85,10 @@ return {
           },
           filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         },
+
         volar = true,
+
+        emmet_ls = true,
 
         jsonls = {
           settings = {
@@ -123,7 +130,7 @@ return {
         "rust_analyzer",
         "marksman",
         "html",
-        "emmet_language_server",
+        "emmet_ls",
         "dockerls",
         "docker_compose_language_service",
         "clangd",

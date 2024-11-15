@@ -7,7 +7,7 @@ return {
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-buffer",
-    { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
+    { "L3MON4D3/LuaSnip", version = "v2.*", build = "make install_jsregexp" },
     "saadparwaiz1/cmp_luasnip",
     "rafamadriz/friendly-snippets",
   },
@@ -31,7 +31,13 @@ return {
       },
       sources = {
         {name = 'path'},
-        {name = 'nvim_lsp'},
+        {
+          name = 'nvim_lsp',
+          entry_filter = function(entry, ctx)
+            -- Ignore Text suggestions
+            return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
+          end,
+        },
         {name = 'nvim_lua'},
         {name = 'luasnip', keyword_length = 2},
         {name = 'buffer', keyword_length = 3},
@@ -90,6 +96,11 @@ return {
         ['<C-f>'] = cmp.mapping.scroll_docs(5),
         ['<C-u>'] = cmp.mapping.scroll_docs(-5),
       }),
+      snippet = {
+        expand = function (args)
+          vim.snippet.expand(args.body)
+        end,
+      },
     })
   end,
 }

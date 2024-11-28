@@ -68,7 +68,23 @@ return {
           }
         },
         intelephense = true,
-        rust_analyzer = true,
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              cargo = {
+                extraEnv = {
+                  CARGO_TARGET_DIR = "target/rust-analyzer"
+                },
+              },
+              check = {
+                command = "clippy",
+              },
+              procMacro = {
+                enable = true,
+              },
+            },
+          },
+        },
         cssls = true,
         marksman = true,
 

@@ -20,7 +20,7 @@ return {
       -- * god i love js...
       local mason_registry = require('mason-registry')
       local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path()
-        .. '/node_modules/@vue/language-server'
+          .. '/node_modules/@vue/language-server'
 
       local servers = {
         -- Lint project and open problems in quickfix list :)
@@ -34,12 +34,20 @@ return {
               command = "EslintFixAll",
             })
           end,
+          settings = {
+            eslint = {
+              autoFixOnSave = true, -- does this even do anything?
+              format = {
+                enable = true,
+              },
+            },
+          },
         },
         bashls = true,
         lua_ls = {
           on_init = function(client)
             local path = client.workspace_folders[1].name
-            if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+            if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
               return
             end
 
@@ -90,6 +98,31 @@ return {
 
         -- Probably want to disable formatting for this lang server
         ts_ls = {
+          settings = {
+            -- disable formatting because we use eslint.
+            javascript = {
+              format = { enable = false },
+              inlayHints = {
+                enumMemberValues = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                parameterNames = { enabled = 'all' },
+                parameterTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                variableTypes = { enabled = true },
+              },
+            },
+            typescript = {
+              format = { enable = false },
+              inlayHints = {
+                enumMemberValues = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                parameterNames = { enabled = 'all' },
+                parameterTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                variableTypes = { enabled = true },
+              },
+            },
+          },
           init_options = {
             plugins = {
               {
@@ -102,8 +135,15 @@ return {
           filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         },
 
-        volar = true,
-
+        tailwindcss = true,
+        volar = {
+          vue = {
+            format = {
+              template = { initialIndent = false },
+              wrapAttributes = 'preserve',
+            },
+          }
+        },
         emmet_ls = true,
 
         jsonls = {
@@ -167,9 +207,6 @@ return {
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-          -- local bufnr = args.buf
-          -- local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
-
           vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
           vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = 0 })
@@ -184,6 +221,28 @@ return {
 
           vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
+
+          -- auto format on save
+          --
+          -- @todo  the following does not check if formatting is enabled in settings.
+          --        only if client supports formatting...
+          --
+          local client = vim.lsp.get_client_by_id(args.data.client_id);
+          if not client then return end
+
+          if client.supports_method('textDocument/formatting') then
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              buffer = args.buf,
+              callback = function()
+                -- exclude js ts and vue files
+                if vim.bo.filetype == 'javascript' or vim.bo.filetype == 'typescript' or vim.bo.filetype == 'vue' then
+                  return
+                end
+
+                vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+              end,
+            })
+          end
         end,
       })
     end,

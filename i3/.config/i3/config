@@ -174,5 +174,3 @@ include ~/.config/i3/triplemon.conf
 
 exec_always --no-startup-id picom -b
 
-gaps outer 1
-gaps inner 7

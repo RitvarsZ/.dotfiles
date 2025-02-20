@@ -34,10 +34,10 @@ vim.opt.colorcolumn = "80"
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.foldenable = true
-vim.o.foldlevel=20
-vim.o.foldmethod='expr'
-vim.o.foldexpr='nvim_treesitter#foldexpr()'
+vim.o.foldlevel = 20
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 
 vim.opt.inccommand = "split"
 
-
+vim.g.autoformat = true

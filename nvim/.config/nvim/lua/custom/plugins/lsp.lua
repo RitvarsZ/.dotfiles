@@ -8,6 +8,9 @@ return {
 
       { "j-hui/fidget.nvim", opts = {} },
 
+      -- Autoformatting
+      "stevearc/conform.nvim",
+
       -- Schema information
       "b0o/SchemaStore.nvim",
     },
@@ -18,9 +21,9 @@ return {
       -- This is for ts_ls
       -- see: https://github.com/vuejs/language-tools
       -- * god i love js...
-      local mason_registry = require('mason-registry')
-      local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path()
-          .. '/node_modules/@vue/language-server'
+      local mason_registry = require "mason-registry"
+      local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
+        .. "/node_modules/@vue/language-server"
 
       local servers = {
         -- Lint project and open problems in quickfix list :)
@@ -47,33 +50,33 @@ return {
         lua_ls = {
           on_init = function(client)
             local path = client.workspace_folders[1].name
-            if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+            if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
               return
             end
 
-            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+            client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
               runtime = {
                 -- Tell the language server which version of Lua you're using
                 -- (most likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT'
+                version = "LuaJIT",
               },
               -- Make the server aware of Neovim runtime files
               workspace = {
                 checkThirdParty = false,
                 library = {
-                  vim.env.VIMRUNTIME
+                  vim.env.VIMRUNTIME,
                   -- Depending on the usage, you might want to add additional paths here.
                   -- "${3rd}/luv/library"
                   -- "${3rd}/busted/library",
-                }
+                },
                 -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
                 -- library = vim.api.nvim_get_runtime_file("", true)
-              }
+              },
             })
           end,
           settings = {
-            Lua = {}
-          }
+            Lua = {},
+          },
         },
         intelephense = true,
         rust_analyzer = {
@@ -81,7 +84,7 @@ return {
             ["rust-analyzer"] = {
               cargo = {
                 extraEnv = {
-                  CARGO_TARGET_DIR = "target/rust-analyzer"
+                  CARGO_TARGET_DIR = "target/rust-analyzer",
                 },
               },
               check = {
@@ -105,7 +108,7 @@ return {
               inlayHints = {
                 enumMemberValues = { enabled = true },
                 functionLikeReturnTypes = { enabled = true },
-                parameterNames = { enabled = 'all' },
+                parameterNames = { enabled = "all" },
                 parameterTypes = { enabled = true },
                 propertyDeclarationTypes = { enabled = true },
                 variableTypes = { enabled = true },
@@ -116,7 +119,7 @@ return {
               inlayHints = {
                 enumMemberValues = { enabled = true },
                 functionLikeReturnTypes = { enabled = true },
-                parameterNames = { enabled = 'all' },
+                parameterNames = { enabled = "all" },
                 parameterTypes = { enabled = true },
                 propertyDeclarationTypes = { enabled = true },
                 variableTypes = { enabled = true },
@@ -126,13 +129,13 @@ return {
           init_options = {
             plugins = {
               {
-                name = '@vue/typescript-plugin',
+                name = "@vue/typescript-plugin",
                 location = vue_language_server_path,
-                languages = { 'vue' },
+                languages = { "vue" },
               },
             },
           },
-          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         },
 
         tailwindcss = true,
@@ -140,9 +143,9 @@ return {
           vue = {
             format = {
               template = { initialIndent = false },
-              wrapAttributes = 'preserve',
+              wrapAttributes = "preserve",
             },
-          }
+          },
         },
         emmet_ls = true,
 
@@ -192,6 +195,7 @@ return {
         "clangd",
         "bashls",
         "phpstan",
+        "pint",
       }
 
       vim.list_extend(ensure_installed, servers_to_install)
@@ -213,60 +217,43 @@ return {
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = 0 })
           vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { buffer = 0 })
           vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
-          vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, { buffer = 0 })
+          vim.keymap.set("i", "<C-h>", function()
+            vim.lsp.buf.signature_help()
+          end, { buffer = 0 })
 
-          vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-          vim.keymap.set('n', '<space>]', vim.diagnostic.goto_next)
-          vim.keymap.set('n', '<space>[', vim.diagnostic.goto_prev)
+          vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
+          vim.keymap.set("n", "<space>]", vim.diagnostic.goto_next)
+          vim.keymap.set("n", "<space>[", vim.diagnostic.goto_prev)
 
           vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
-
-          -- auto format on save
-          --
-          -- @todo  the following does not check if formatting is enabled in settings.
-          --        only if client supports formatting...
-          --
-          local client = vim.lsp.get_client_by_id(args.data.client_id);
-          if not client then return end
-
-          if client.supports_method('textDocument/formatting') then
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              buffer = args.buf,
-              callback = function()
-                -- exclude js ts and vue files
-                if vim.bo.filetype == 'javascript' or vim.bo.filetype == 'typescript' or vim.bo.filetype == 'vue' then
-                  return
-                end
-
-                vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
-              end,
-            })
-          end
         end,
       })
-    end,
 
-    vim.diagnostic.config({
-      signs = {
-        text = {
-          [vim.diagnostic.severity.ERROR] = '✘',
-          [vim.diagnostic.severity.WARN] = '▲',
-          [vim.diagnostic.severity.HINT] = '⚑',
-          [vim.diagnostic.severity.INFO] = '',
+      -- auto format on save
+      require("custom.autoformat").setup()
+
+      vim.diagnostic.config {
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = "✘",
+            [vim.diagnostic.severity.WARN] = "▲",
+            [vim.diagnostic.severity.HINT] = "⚑",
+            [vim.diagnostic.severity.INFO] = "",
+          },
         },
-      },
-      virtual_text = {
-        prefix = ''
-      },
-      severity_sort = true,
-      float = {
-        style = 'minimal',
-        border = 'rounded',
-        source = true,
-        header = '',
-        prefix = '',
-      },
-    })
+        virtual_text = {
+          prefix = "",
+        },
+        severity_sort = true,
+        float = {
+          style = "minimal",
+          border = "rounded",
+          source = true,
+          header = "",
+          prefix = "",
+        },
+      }
+    end,
   },
 }

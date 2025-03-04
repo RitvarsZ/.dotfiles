@@ -39,7 +39,7 @@ return {
           end,
           settings = {
             eslint = {
-              autoFixOnSave = true, -- does this even do anything?
+              -- autoFixOnSave = true, -- does this even do anything?
               format = {
                 enable = true,
               },

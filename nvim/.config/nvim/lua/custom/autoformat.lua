@@ -6,15 +6,14 @@ local setup = function()
     formatters_by_ft = {
       lua = { "stylua" },
       php = { "pint" },
-      -- if vim.bo.filetype == 'javascript' or vim.bo.filetype == 'typescript' or vim.bo.filetype == 'vue' then
-      -- disable formtting because eslint.
-      javascript = nil,
-      typescript = nil,
-      vue = nil,
+      javascript = {},
+      typescript = {},
+      vue = {},
+      ["*"] = { "trim_whitespace" },
     },
 
     format_on_save = {
-      lsp_format = "fallback",
+      lsp_format = "never",
       timeout_ms = 500,
     },
     formatters = {

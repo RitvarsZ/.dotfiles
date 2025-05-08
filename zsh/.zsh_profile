@@ -39,6 +39,7 @@ alias dcu="docker compose up"
 alias dc="docker compose"
 alias KILLEM='docker kill $(docker ps -q)'
 alias updatemebby='sudo apt update && sudo apt upgrade'
+alias tinker='dc exec web-backend php artisan tinker'
 # bindkey -s ^i "tmux-cht.sh\n"
 
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True

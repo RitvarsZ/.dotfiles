@@ -20,7 +20,7 @@ font pango:lato 17px
 # Thanks Childz
 for_window [class="^.*"] border pixel 2
                           # class                 border  backgr. text    indicator child_border
-for_window [class="^.*"] client.focused          #77dd77 #285577 #ffffff #2e9ef4   #285577 
+for_window [class="^.*"] client.focused          #77dd77 #285577 #ffffff #2e9ef4   #285577
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -48,7 +48,7 @@ bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # Application shortcuts
 bindsym $mod+e exec nautilus
-bindsym $mod+b exec google-chrome
+bindsym $mod+b exec zen
 bindsym Mod4+Shift+s exec --no-startup-id shutter -s
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
@@ -168,9 +168,9 @@ assign [instance="kirmada"] workspace 6
 no_focus [instance="kirmada"]
 for_window [instance="kirmada"] focus_on_window_activation none
 
-# include ~/.config/i3/singlemon.conf
+include ~/.config/i3/singlemon.conf
 # include ~/.config/i3/dualmon.conf
-include ~/.config/i3/triplemon.conf
+# include ~/.config/i3/triplemon.conf
 
 exec_always --no-startup-id picom -b
 

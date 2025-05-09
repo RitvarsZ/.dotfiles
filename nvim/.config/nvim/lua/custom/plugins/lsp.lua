@@ -147,6 +147,7 @@ return {
             },
           },
         },
+        emmet_language_server = true,
         emmet_ls = true,
 
         jsonls = {
@@ -189,6 +190,7 @@ return {
         "rust_analyzer",
         "marksman",
         "html",
+        "emmet_language_server",
         "emmet_ls",
         "dockerls",
         "docker_compose_language_service",

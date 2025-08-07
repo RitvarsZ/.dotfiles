@@ -168,9 +168,9 @@ assign [instance="kirmada"] workspace 6
 no_focus [instance="kirmada"]
 for_window [instance="kirmada"] focus_on_window_activation none
 
-include ~/.config/i3/singlemon.conf
+# include ~/.config/i3/singlemon.conf
 # include ~/.config/i3/dualmon.conf
-# include ~/.config/i3/triplemon.conf
+include ~/.config/i3/triplemon.conf
 
 exec_always --no-startup-id picom -b
 

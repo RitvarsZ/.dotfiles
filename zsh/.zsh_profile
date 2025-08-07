@@ -19,6 +19,7 @@ addToPathFront $HOME/.cargo/bin
 addToPathFront $HOME/.rustup
 addToPathFront $HOME/.local/scripts
 addToPathFront $HOME/.config/lsp/lua-language-server/bin
+addToPathFront $HOME/.local/bin
 
 export DOTFILES=~/.dotfiles
 commitDotFiles() {
@@ -40,7 +41,16 @@ alias dc="docker compose"
 alias KILLEM='docker kill $(docker ps -q)'
 alias updatemebby='sudo apt update && sudo apt upgrade'
 alias tinker='dc exec web-backend php artisan tinker'
-# bindkey -s ^i "tmux-cht.sh\n"
+
+if [ -z "$SSH_AUTH_SOCK" ]; then
+   # Check for a currently running instance of the agent
+   RUNNING_AGENT="`ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l | tr -d '[:space:]'`"
+   if [ "$RUNNING_AGENT" = "0" ]; then
+        # Launch a new instance of the agent
+        ssh-agent -s &> $HOME/.ssh/ssh-agent
+   fi
+   eval `cat $HOME/.ssh/ssh-agent`
+fi
 
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export KUBE_EDITOR=nvim

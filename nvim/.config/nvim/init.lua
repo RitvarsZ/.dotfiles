@@ -1,6 +1,6 @@
 --[[
 -- Setup initial configuration,
--- 
+--
 -- Primarily just download and execute lazy.nvim
 --]]
 vim.g.mapleader = " "
@@ -27,4 +27,3 @@ require("lazy").setup({ import = "custom/plugins" }, {
     notify = false,
   },
 })
-

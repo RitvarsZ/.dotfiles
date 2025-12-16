@@ -15,26 +15,40 @@ return {
       "b0o/SchemaStore.nvim",
     },
     config = function()
-      local lspconfig = require "lspconfig"
-
       require("mason").setup()
       -- This is for ts_ls
       -- see: https://github.com/vuejs/language-tools
       -- * god i love js...
-      local mason_registry = require "mason-registry"
-      local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
-        .. "/node_modules/@vue/language-server"
+      local vue_ls_path = vim.fn.expand("$MASON/packages/vue-language-server")
+      local vue_plugin_path = vue_ls_path .. "/node_modules/@vue/language-server"
 
+      local capabilities = nil
+      if pcall(require, "cmp_nvim_lsp") then
+        capabilities = require("cmp_nvim_lsp").default_capabilities()
+      end
       local servers = {
         -- Lint project and open problems in quickfix list :)
         -- :set makeprg=npx\ eslint\ -f\ unix\ .
         -- :make
         -- :copen
         eslint = {
-          on_attach = function(client, bufnr)
+          on_attach = function(_client, bufnr)
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = bufnr,
-              command = "EslintFixAll",
+              callback = function()
+                local params = vim.lsp.util.make_range_params()
+                params.context = { only = { "source.fixAll.eslint" } }
+                local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, 1000)
+                for _, res in pairs(result or {}) do
+                  for _, r in pairs(res.result or {}) do
+                    if r.edit then
+                      vim.lsp.util.apply_workspace_edit(r.edit, "utf-8")
+                    elseif r.command then
+                      vim.lsp.buf.execute_command(r.command)
+                    end
+                  end
+                end
+              end,
             })
           end,
           settings = {
@@ -130,7 +144,7 @@ return {
             plugins = {
               {
                 name = "@vue/typescript-plugin",
-                location = vue_language_server_path,
+                location = vue_plugin_path,
                 languages = { "vue" },
               },
             },
@@ -139,7 +153,7 @@ return {
         },
 
         tailwindcss = true,
-        volar = {
+        vue_ls = {
           vue = {
             format = {
               template = { initialIndent = false },
@@ -183,7 +197,7 @@ return {
 
       local ensure_installed = {
         "lua_ls",
-        "volar",
+        "vue-language-server",
         "eslint",
         "intelephense",
         "ts_ls",
@@ -200,15 +214,26 @@ return {
         "pint",
       }
 
-      vim.list_extend(ensure_installed, servers_to_install)
       require("mason-tool-installer").setup { ensure_installed = ensure_installed }
+
+      vim.lsp.config("*", {
+        capabilities = capabilities
+      })
 
       for name, config in pairs(servers) do
         if config == true then
           config = {}
         end
 
-        lspconfig[name].setup(config)
+        -- Only call vim.lsp.config if there are server-specific settings
+        if next(config) ~= nil then
+          -- Remove manual_install flag as it's not an LSP config field
+          local lsp_config = vim.tbl_deep_extend("force", {}, config)
+          lsp_config.manual_install = nil
+          vim.lsp.config(name, lsp_config)
+        end
+
+        vim.lsp.enable(name)
       end
 
       vim.api.nvim_create_autocmd("LspAttach", {

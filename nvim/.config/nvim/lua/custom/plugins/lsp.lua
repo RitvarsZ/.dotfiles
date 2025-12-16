@@ -32,32 +32,31 @@ return {
         -- :make
         -- :copen
         eslint = {
-          on_attach = function(_client, bufnr)
+          on_attach = function(client, bufnr)
+            if client.name ~= "eslint" then
+              return
+            end
+
             vim.api.nvim_create_autocmd("BufWritePre", {
               buffer = bufnr,
               callback = function()
-                local params = vim.lsp.util.make_range_params()
-                params.context = { only = { "source.fixAll.eslint" } }
-                local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, 1000)
-                for _, res in pairs(result or {}) do
-                  for _, r in pairs(res.result or {}) do
-                    if r.edit then
-                      vim.lsp.util.apply_workspace_edit(r.edit, "utf-8")
-                    elseif r.command then
-                      vim.lsp.buf.execute_command(r.command)
-                    end
-                  end
-                end
+                vim.lsp.buf.code_action({
+                  apply = true,
+                  context = {
+                    only = { "source.fixAll.eslint" },
+                    diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
+                  },
+                })
               end,
             })
           end,
           settings = {
-            eslint = {
-              -- autoFixOnSave = true, -- does this even do anything?
-              format = {
-                enable = true,
-              },
+            codeActionOnSave = {
+              enable = true,
+              mode = "all"
             },
+            workingDirectories = { mode = "auto" },
+            format = "auto_format",
           },
         },
         bashls = true,
@@ -249,9 +248,12 @@ return {
           end, { buffer = 0 })
 
           vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
-          vim.keymap.set("n", "<space>]", vim.diagnostic.goto_next)
-          vim.keymap.set("n", "<space>[", vim.diagnostic.goto_prev)
-
+          vim.keymap.set("n", "<space>]", function()
+            vim.diagnostic.jump({count=1,float=true})
+          end)
+          vim.keymap.set("n", "<space>[", function()
+            vim.diagnostic.jump({count=-1,float=true})
+          end)
           vim.keymap.set("n", "<space>cr", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, { buffer = 0 })
         end,

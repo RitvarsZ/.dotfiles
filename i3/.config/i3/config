@@ -48,7 +48,7 @@ bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # Application shortcuts
 bindsym $mod+e exec nautilus
-bindsym $mod+b exec zen
+bindsym $mod+b exec /opt/zen/zen
 bindsym Mod4+Shift+s exec --no-startup-id shutter -s
 
 # There also is the (new) i3-dmenu-desktop which only displays applications

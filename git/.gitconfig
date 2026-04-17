@@ -12,5 +12,3 @@
 
 [core]
 	editor = nvim
-[safe]
-	directory = /home/ritvars/work/kirmada-deployments

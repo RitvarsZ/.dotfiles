@@ -49,7 +49,7 @@ return {
         lualine_c = {
           {
             'diagnostics',
-            sources = {'nvim_lsp'},
+            sources = {'nvim_diagnostic'},
             sections = {'error', 'warn', 'info', 'hint'},
             always_visible = true,
           }
@@ -66,7 +66,7 @@ return {
         lualine_c = {
           {
             'diagnostics',
-            sources = {'nvim_lsp'},
+            sources = {'nvim_diagnostic'},
             sections = {'error', 'warn', 'info', 'hint'},
             always_visible = true,
           }

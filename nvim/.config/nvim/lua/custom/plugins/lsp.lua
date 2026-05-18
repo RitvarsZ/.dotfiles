@@ -26,11 +26,8 @@ return {
       if pcall(require, "cmp_nvim_lsp") then
         capabilities = require("cmp_nvim_lsp").default_capabilities()
       end
+
       local servers = {
-        -- Lint project and open problems in quickfix list :)
-        -- :set makeprg=npx\ eslint\ -f\ unix\ .
-        -- :make
-        -- :copen
         eslint = {
           on_attach = function(client, bufnr)
             if client.name ~= "eslint" then
@@ -195,6 +192,7 @@ return {
       end, vim.tbl_keys(servers))
 
       local ensure_installed = {
+        "pyright",
         "lua_ls",
         "vue-language-server",
         "eslint",
@@ -261,6 +259,9 @@ return {
 
       -- auto format on save
       require("custom.autoformat").setup()
+
+      require('mason-lspconfig').setup()
+      -- require('lspconfig').pyright.setup({})
 
       vim.diagnostic.config {
         signs = {

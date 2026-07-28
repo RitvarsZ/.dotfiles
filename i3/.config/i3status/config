@@ -11,11 +11,17 @@ general {
         interval = 1
 }
 
+order += "cpu_temperature 0"
+order += "load"
 order += "disk /"
 order += "battery all"
-order += "load"
 order += "memory"
 order += "tztime local"
+
+cpu_temperature 0 {
+    format = "Coffee temp: %degrees °C"
+    path = "/sys/class/hwmon/hwmon0/temp1_input"
+}
 
 battery all {
         format = "%status %percentage %remaining"
@@ -26,14 +32,14 @@ tztime local {
 }
 
 load {
-        format = "CPU: %1min"
+        format = "Monke go brr? %1min"
 }
 
 memory {
-        format = "MEMORY: %used / %total"
+        format = "STONKS: %used / %total"
 }
 
 disk "/" {
-        format = "DISK: %avail / %total"
+        format = "usb: %avail / %total"
 }
 

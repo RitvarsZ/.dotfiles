@@ -32,7 +32,7 @@
 
 -- Close window: Super+W -> Super+Shift+Q
 hl.unbind("SUPER + W")
-o.bind("SUPER + SHIFT + Q", "Close window", hl.dsp.window.close())
+o.rebind("SUPER + SHIFT + Q", "Close window", hl.dsp.window.close())
 
 -- Launcher: Super+Space -> Super+D
 hl.unbind("SUPER + SPACE")

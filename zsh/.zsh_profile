@@ -32,7 +32,7 @@ commitDotFiles() {
 
 export ORG_DIR=~/org
 syncOrgFiles() {
-    pushd $DOTFILES
+    pushd $ORG_DIR
     git add .
     git commit -m "sync"
     git push origin master

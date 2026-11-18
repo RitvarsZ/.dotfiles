@@ -12,6 +12,9 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file 'noerror 'nomessage)
 
+;; extra config modules live in ~/.emacs.d/lisp/
+(add-to-list 'load-path (locate-user-emacs-file "lisp"))
+
 ;; font
 (add-to-list 'default-frame-alist
 	'(font . "JetBrainsMono Nerd Font-26"))
@@ -159,6 +162,15 @@
 (use-package doom-themes
   :ensure t
   :config
+  ;; doom-themes makes gnus-group-news-low-empty inherit gnus-group-news-low,
+  ;; which already inherits it back -> "inheritance cycle" error whenever a new
+  ;; frame is created (e.g. corfu popups). Replace the theme's spec to break it.
+  (defun my/fix-doom-gnus-face-cycle (theme)
+    (when (string-prefix-p "doom-" (symbol-name theme))
+      (custom-theme-set-faces
+       theme
+       '(gnus-group-news-low-empty ((t (:inherit gnus-group-mail-1-empty)))))))
+  (add-hook 'enable-theme-functions #'my/fix-doom-gnus-face-cycle)
   (load-theme 'doom-spacegrey t))
 
 ;; modeline
@@ -172,6 +184,9 @@
 ;; terminal-emulator
 (use-package eat
   :ensure t)
+
+;; lsp (corfu, php-mode, lsp-mode + intelephense)
+(require 'init-lsp)
 
 ;; org?
 (use-package org

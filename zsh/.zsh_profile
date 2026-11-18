@@ -30,6 +30,15 @@ commitDotFiles() {
     popd
 }
 
+export ORG_DIR=~/org
+syncOrgFiles() {
+    pushd $DOTFILES
+    git add .
+    git commit -m "sync"
+    git push origin master
+    popd
+}
+
 
 export N_PREFIX=$HOME/.n
 addToPathFront $N_PREFIX/bin

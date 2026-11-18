@@ -1,4 +1,4 @@
-;; -*- lexical-binding: nil; -*-
+;; -*- lexical-binding: t; -*-
 
 (package-initialize)
 
@@ -7,6 +7,10 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (setq package-archive-priorities
       '(("gnu" . 30) ("nongnu" . 25) ("melpa-stable" . 20) ("melpa" . 0)))
+
+;; keep Custom's auto-generated settings out of init.el
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(load custom-file 'noerror 'nomessage)
 
 ;; font
 (add-to-list 'default-frame-alist
@@ -54,6 +58,25 @@
   :config
   (evil-collection-init))
 
+;; :q / :wq / :x close the window or buffer, never Emacs itself (:qa still quits)
+(defun my/quit-window-or-buffer ()
+  "Close this window, or kill the buffer if it's the last window."
+  (interactive)
+  (if (one-window-p)
+      (kill-current-buffer)
+    (delete-window)))
+
+(defun my/save-and-quit ()
+  "Save, then close the window or buffer, but never quit Emacs."
+  (interactive)
+  (save-buffer)
+  (my/quit-window-or-buffer))
+
+(with-eval-after-load 'evil
+  (evil-ex-define-cmd "q[uit]" #'my/quit-window-or-buffer)
+  (evil-ex-define-cmd "wq"     #'my/save-and-quit)
+  (evil-ex-define-cmd "x[it]"  #'my/save-and-quit))
+
 ;; leader key
 (use-package general
   :ensure t
@@ -96,25 +119,48 @@
 (use-package magit
   :ensure t)
 
+;; gitsigns
+(use-package diff-hl
+  :ensure t
+  :hook
+  ((magit-pre-refresh  . diff-hl-magit-pre-refresh)
+   (magit-post-refresh . diff-hl-magit-post-refresh)
+   (dired-mode         . diff-hl-dired-mode))          ; changed files marked in dired
+  :init
+  (global-diff-hl-mode 1)
+  :config
+  (diff-hl-flydiff-mode 1))                            ; update as you type, not only on save
+
 ;; keymaps
 (keymap-global-set "C-/" #'comment-line)
+(keymap-global-set "C-x C-b" #'ibuffer)
+(keymap-global-set "C-x b" #'consult-buffer)
+(keymap-global-set "C-x p b" #'consult-project-buffer)
+
+;; ibuffer
+(use-package ibuffer
+  :custom
+  (ibuffer-saved-filter-groups
+   '(("default"
+      ("Files" (visiting-file))
+      ("Emacs" (name . "^\\*")))))
+  :hook
+  (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default"))))
 
 ;; theme
-(use-package atom-one-dark-theme
+(use-package doom-themes
   :ensure t
   :config
-  (load-theme 'atom-one-dark t))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(atom-one-dark-theme consult evil-collection general magit marginalia
-			 orderless vertico)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  (load-theme 'doom-spacegrey t))
+
+;; modeline
+(use-package doom-modeline
+  :ensure t
+  :custom
+  (doom-modeline-project-name t)   ; show current project.el project
+  :init
+  (doom-modeline-mode 1))
+
+;; terminal-emulator
+(use-package eat
+  :ensure t)

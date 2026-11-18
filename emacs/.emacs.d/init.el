@@ -31,9 +31,14 @@
 (setq dired-kill-when-opening-new-dired-buffer t)
 (which-key-mode 1)
 (savehist-mode 1)
+
+;; move backups and auto saves out of sight
 (setq backup-directory-alist `(("." . ,(locate-user-emacs-file "backups")))
       backup-by-copying t)
 (setq create-lockfiles nil)
+(let ((dir (locate-user-emacs-file "auto-saves/")))
+  (make-directory dir t)
+  (setq auto-save-file-name-transforms `((".*" ,dir t))))
 
 ;; vim bindings
 (use-package evil
@@ -42,6 +47,7 @@
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
+  (setq evil-undo-system 'undo-redo)
   (defvar evil-mode-buffers '())
   :config
   (defun my/recenter-after (&rest _)
@@ -136,6 +142,8 @@
 (keymap-global-set "C-x C-b" #'ibuffer)
 (keymap-global-set "C-x b" #'consult-buffer)
 (keymap-global-set "C-x p b" #'consult-project-buffer)
+(keymap-global-set "C-c a" #'org-agenda)
+(keymap-global-set "C-c c" #'org-capture)
 
 ;; ibuffer
 (use-package ibuffer
@@ -164,3 +172,24 @@
 ;; terminal-emulator
 (use-package eat
   :ensure t)
+
+;; org?
+(use-package org
+  :custom
+  (org-directory "~/org/")
+  (org-default-notes-file "~/org/inbox.org")
+  (org-agenda-files '("~/org/"))
+  (org-capture-templates
+   '(("t" "Todo" entry (file "inbox.org")
+      "* TODO %?\n%U\n%a")
+     ("n" "Note" entry (file "inbox.org")
+      "* %?\n%U"))))
+
+(use-package evil-org
+  :ensure t
+  :after org
+  :hook (org-mode . evil-org-mode)
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+

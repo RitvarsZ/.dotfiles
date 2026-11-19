@@ -20,6 +20,7 @@ addToPathFront $HOME/.rustup
 addToPathFront $HOME/.local/scripts
 addToPathFront $HOME/.config/lsp/lua-language-server/bin
 addToPathFront $HOME/.local/bin
+addToPathFront $HOME/.config/composer/vendor/bin
 
 export DOTFILES=~/.dotfiles
 commitDotFiles() {

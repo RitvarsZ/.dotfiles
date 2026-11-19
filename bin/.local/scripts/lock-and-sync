@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+"$HOME/.local/scripts/sync-org" &
+# -n (--nofork): stay in foreground until unlocked
+i3lock -n -c 000000
+"$HOME/.local/scripts/sync-org"

@@ -33,11 +33,7 @@ commitDotFiles() {
 
 export ORG_DIR=~/org
 syncOrgFiles() {
-    pushd $ORG_DIR
-    git add .
-    git commit -m "sync"
-    git push origin master
-    popd
+    sync-org
 }
 
 

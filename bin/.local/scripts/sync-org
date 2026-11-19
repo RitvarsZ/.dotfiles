@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+cd "${ORG_DIR:-$HOME/org}" || exit 1
+git add .
+git commit -m "sync" || true
+git pull --rebase origin master || exit 1
+git push origin master

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Omarchy (Hyprland) has no lock/unlock hook, so poll the shell's lock state
+# and run sync-org whenever it changes (on lock and on unlock).
+exec 9>"${XDG_RUNTIME_DIR:-/tmp}/lock-sync-watch.lock"
+flock -n 9 || exit 0  # only one watcher
+
+prev=$(omarchy-shell lock isLocked 2>/dev/null)
+while sleep 3; do
+    cur=$(omarchy-shell lock isLocked 2>/dev/null) || continue
+    if [[ -n $prev && $cur != "$prev" ]]; then
+        "$HOME/.local/scripts/sync-org" >/dev/null 2>&1 &
+    fi
+    prev=$cur
+done

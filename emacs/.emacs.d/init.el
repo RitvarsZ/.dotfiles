@@ -8,6 +8,9 @@
 (setq package-archive-priorities
       '(("gnu" . 30) ("nongnu" . 25) ("melpa-stable" . 20) ("melpa" . 0)))
 
+(setq inhibit-startup-screen t
+      initial-scratch-message nil)
+
 ;; keep Custom's auto-generated settings out of init.el
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file 'noerror 'nomessage)
@@ -86,20 +89,6 @@
   (evil-ex-define-cmd "wq"     #'my/save-and-quit)
   (evil-ex-define-cmd "x[it]"  #'my/save-and-quit))
 
-;; leader key
-(use-package general
-  :ensure t
-  :after evil
-  :config
-  (general-create-definer my/leader
-    :states '(normal visual motion)
-    :keymaps 'override
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  ;; (my/leader "pp" '(project-switch-project :which-key "switch project"))
-  )
-
 ;; completion: vertical list, out-of-order matching, annotations
 (use-package vertico
   :ensure t
@@ -142,11 +131,34 @@
 
 ;; keymaps
 (keymap-global-set "C-/" #'comment-line)
-(keymap-global-set "C-x C-b" #'ibuffer)
-(keymap-global-set "C-x b" #'consult-buffer)
-(keymap-global-set "C-x p b" #'consult-project-buffer)
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c c" #'org-capture)
+(keymap-global-set "C-x C-b" #'ibuffer)
+(keymap-global-set "C-x b" #'consult-buffer)
+
+(use-package general
+  :ensure t
+  :after evil
+  :config
+  (general-create-definer my/leader
+    :states '(normal visual motion)
+    :keymaps 'override
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (my/leader "p p" '(project-switch-project :which-key "switch project"))
+  (my/leader "p b" '(consult-project-buffer :which-key "show project buffers"))
+  (my/leader "p f" '(project-find-file :which-key "find project file"))
+  (my/leader "p s" '(consult-ripgrep :which-key "search project files"))
+  (my/leader "g s" '(magit :which-key "magit"))
+  (my/leader "g r" '(lsp-find-references :which-key "find references"))
+  (my/leader "g i" '(lsp-find-implementation :which-key "find implementation"))
+  (my/leader "j" '(next-error :which-key "next result"))
+  (my/leader "k" '(previous-error :which-key "previous result"))
+  (my/leader "]" '(flymake-goto-next-error :which-key "next diagnostic"))
+  (my/leader "[" '(flymake-goto-prev-error :which-key "prev diagnostic"))
+  (my/leader "e" '(display-local-help :which-key "show diagnostic"))
+  )
 
 ;; ibuffer
 (use-package ibuffer

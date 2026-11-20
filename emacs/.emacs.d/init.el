@@ -7,6 +7,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (setq package-archive-priorities
       '(("gnu" . 30) ("nongnu" . 25) ("melpa-stable" . 20) ("melpa" . 0)))
+(add-to-list 'package-pinned-packages '(web-server . "melpa"))
 
 (setq inhibit-startup-screen t
       initial-scratch-message nil)
@@ -30,7 +31,11 @@
 (show-paren-mode 1)
 
 ; theme
-(load-theme 'wombat)
+;; (load-theme 'wombat)
+(use-package atom-one-dark-theme
+  :ensure t
+  :config
+  (load-theme 'atom-one-dark t))
 
 ;; line numbers
 (setq display-line-numbers-type 'relative)

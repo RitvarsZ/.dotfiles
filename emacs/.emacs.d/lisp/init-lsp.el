@@ -2,6 +2,7 @@
 
 ;; lsp: bigger reads from language servers (default 4k is too small)
 (setq read-process-output-max (* 1024 1024))
+(setq gc-cons-threshold (* 100 1024 1024)
 
 ;; in-buffer completion popup (like nvim-cmp)
 (use-package corfu
@@ -29,7 +30,7 @@
   (lsp-completion-provider :none)          ; let corfu show completions
   (lsp-headerline-breadcrumb-enable nil)   ; less noise
   :hook
-  ((php-mode . lsp-deferred)               ; intelephense, found on PATH
+  ((php-mode . lsp-deferred)
    (lsp-mode . lsp-enable-which-key-integration)
    (lsp-mode . my/lsp-lookup-setup))
   :config

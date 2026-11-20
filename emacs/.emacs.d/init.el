@@ -29,6 +29,9 @@
 (column-number-mode 1)
 (show-paren-mode 1)
 
+; theme
+(load-theme 'wombat)
+
 ;; line numbers
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
@@ -160,6 +163,11 @@
   (my/leader "e" '(display-local-help :which-key "show diagnostic"))
   )
 
+(use-package evil-ghostel
+  :ensure t
+  :after
+  (evil ghostel))
+
 ;; ibuffer
 (use-package ibuffer
   :custom
@@ -170,21 +178,6 @@
   :hook
   (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default"))))
 
-;; theme
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; doom-themes makes gnus-group-news-low-empty inherit gnus-group-news-low,
-  ;; which already inherits it back -> "inheritance cycle" error whenever a new
-  ;; frame is created (e.g. corfu popups). Replace the theme's spec to break it.
-  (defun my/fix-doom-gnus-face-cycle (theme)
-    (when (string-prefix-p "doom-" (symbol-name theme))
-      (custom-theme-set-faces
-       theme
-       '(gnus-group-news-low-empty ((t (:inherit gnus-group-mail-1-empty)))))))
-  (add-hook 'enable-theme-functions #'my/fix-doom-gnus-face-cycle)
-  (load-theme 'doom-spacegrey t))
-
 ;; modeline
 (use-package doom-modeline
   :ensure t
@@ -194,7 +187,7 @@
   (doom-modeline-mode 1))
 
 ;; terminal-emulator
-(use-package eat
+(use-package ghostel
   :ensure t)
 
 ;; lsp (corfu, php-mode, lsp-mode + intelephense)
@@ -220,3 +213,10 @@
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
+; claude
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind ("C-c C-;" . claude-code-ide-menu) ; Set your favorite keybinding
+  :config
+  (setq claude-code-ide-terminal-backend 'ghostel)
+  (claude-code-ide-emacs-tools-setup))

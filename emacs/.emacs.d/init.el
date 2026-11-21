@@ -30,8 +30,7 @@
 (column-number-mode 1)
 (show-paren-mode 1)
 
-; theme
-;; (load-theme 'wombat)
+;; theme
 (use-package atom-one-dark-theme
   :ensure t
   :config
@@ -131,11 +130,14 @@
   :hook
   ((magit-pre-refresh  . diff-hl-magit-pre-refresh)
    (magit-post-refresh . diff-hl-magit-post-refresh)
-   (dired-mode         . diff-hl-dired-mode))          ; changed files marked in dired
+   (dired-mode         . diff-hl-dired-mode))
   :init
   (global-diff-hl-mode 1)
   :config
-  (diff-hl-flydiff-mode 1))                            ; update as you type, not only on save
+  ;; theme only sets fg; diff-hl fills the indicator with bg, so copy fg -> bg
+  (dolist (f '(diff-hl-insert diff-hl-change diff-hl-delete))
+    (set-face-background f (face-foreground f nil t)))
+  (diff-hl-flydiff-mode 1))
 
 ;; keymaps
 (keymap-global-set "C-/" #'comment-line)
@@ -195,7 +197,7 @@
 (use-package ghostel
   :ensure t)
 
-;; lsp (corfu, php-mode, lsp-mode + intelephense)
+;; lsp (corfu, php-ts-mode, lsp-mode + intelephense)
 (require 'init-lsp)
 
 ;; org?

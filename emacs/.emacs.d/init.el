@@ -53,48 +53,122 @@
   (make-directory dir t)
   (setq auto-save-file-name-transforms `((".*" ,dir t))))
 
-;; vim bindings
-(use-package evil
+(defun my/recenter-after (&rest _)
+  "Center the screen on the cursor, like zz."
+  (recenter))
+(advice-add 'scroll-up-command   :after #'my/recenter-after)
+(advice-add 'scroll-down-command :after #'my/recenter-after)
+
+;; modal editing (meow, selection-first; qwerty layout)
+(use-package meow
   :ensure t
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-undo-system 'undo-redo)
-  (defvar evil-mode-buffers '())
+  :demand t
+  :custom
+  (meow-use-clipboard t)
+  ;; SPC g ... is my leader prefix, not C-M- (SPC m still gives M-)
+  (meow-keypad-ctrl-meta-prefix nil)
   :config
-  (defun my/recenter-after (&rest _)
-    "Center the screen on the cursor, like zz."
-    (recenter))
-
-  (advice-add 'evil-scroll-down :after #'my/recenter-after)
-  (advice-add 'evil-scroll-up   :after #'my/recenter-after)
-  (evil-mode 1))
-
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-
-;; :q / :wq / :x close the window or buffer, never Emacs itself (:qa still quits)
-(defun my/quit-window-or-buffer ()
-  "Close this window, or kill the buffer if it's the last window."
-  (interactive)
-  (if (one-window-p)
-      (kill-current-buffer)
-    (delete-window)))
-
-(defun my/save-and-quit ()
-  "Save, then close the window or buffer, but never quit Emacs."
-  (interactive)
-  (save-buffer)
-  (my/quit-window-or-buffer))
-
-(with-eval-after-load 'evil
-  (evil-ex-define-cmd "q[uit]" #'my/quit-window-or-buffer)
-  (evil-ex-define-cmd "wq"     #'my/save-and-quit)
-  (evil-ex-define-cmd "x[it]"  #'my/save-and-quit))
+  (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+  (set-face-attribute 'meow-cheatsheet-command nil :height 1.0)
+  ;; meow-undo replays this key; C-/ is rebound to comment-line below
+  (setq meow--kbd-undo "C-_")
+  (meow-motion-define-key
+   '("j" . meow-next)
+   '("k" . meow-prev)
+   '("<escape>" . ignore))
+  ;; leader: SPC <key> runs C-c <key>
+  (meow-leader-define-key
+   '("1" . meow-digit-argument)
+   '("2" . meow-digit-argument)
+   '("3" . meow-digit-argument)
+   '("4" . meow-digit-argument)
+   '("5" . meow-digit-argument)
+   '("6" . meow-digit-argument)
+   '("7" . meow-digit-argument)
+   '("8" . meow-digit-argument)
+   '("9" . meow-digit-argument)
+   '("0" . meow-digit-argument)
+   '("/" . meow-keypad-describe-key)
+   '("?" . meow-cheatsheet)
+   '("p p" . project-switch-project)
+   '("p b" . consult-project-buffer)
+   '("p f" . project-find-file)
+   '("p s" . consult-ripgrep)
+   '("g s" . magit)
+   '("g r" . lsp-find-references)
+   '("g d" . lsp-find-definition)
+   '("g i" . lsp-find-implementation)
+   '("d" . my/lsp-doc-K)
+   '("j" . next-error)
+   '("k" . previous-error)
+   '("]" . flymake-goto-next-error)
+   '("[" . flymake-goto-prev-error)
+   '("e" . display-local-help))
+  (meow-normal-define-key
+   '("0" . meow-expand-0)
+   '("9" . meow-expand-9)
+   '("8" . meow-expand-8)
+   '("7" . meow-expand-7)
+   '("6" . meow-expand-6)
+   '("5" . meow-expand-5)
+   '("4" . meow-expand-4)
+   '("3" . meow-expand-3)
+   '("2" . meow-expand-2)
+   '("1" . meow-expand-1)
+   '("-" . negative-argument)
+   '(";" . meow-reverse)
+   '("," . meow-inner-of-thing)
+   '("." . meow-bounds-of-thing)
+   '("[" . meow-beginning-of-thing)
+   '("]" . meow-end-of-thing)
+   '("a" . meow-append)
+   '("A" . meow-open-below)
+   '("b" . meow-back-word)
+   '("B" . meow-back-symbol)
+   '("c" . meow-change)
+   '("d" . meow-delete)
+   '("D" . meow-backward-delete)
+   '("e" . meow-next-word)
+   '("E" . meow-next-symbol)
+   '("f" . meow-find)
+   '("g" . meow-cancel-selection)
+   '("G" . meow-grab)
+   '("h" . meow-left)
+   '("H" . meow-left-expand)
+   '("i" . meow-insert)
+   '("I" . meow-open-above)
+   '("j" . meow-next)
+   '("J" . meow-next-expand)
+   '("k" . meow-prev)
+   '("K" . meow-prev-expand)
+   '("l" . meow-right)
+   '("L" . meow-right-expand)
+   '("m" . meow-join)
+   '("n" . meow-search)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
+   '("p" . meow-yank)
+   '("q" . meow-quit)
+   '("Q" . meow-goto-line)
+   '("r" . meow-replace)
+   '("R" . meow-swap-grab)
+   '("s" . meow-kill)
+   '("t" . meow-till)
+   '("u" . meow-undo)
+   '("U" . undo-redo)
+   '("v" . meow-visit)
+   '("w" . meow-mark-word)
+   '("W" . meow-mark-symbol)
+   '("x" . meow-line)
+   '("X" . meow-goto-line)
+   '("y" . meow-save)
+   '("Y" . meow-sync-grab)
+   '("z" . meow-pop-selection)
+   '("'" . repeat)
+   '("<escape>" . ignore))
+  ;; terminals start in INSERT so keys go straight to the shell
+  (add-to-list 'meow-mode-state-list '(ghostel-mode . insert))
+  (meow-global-mode 1))
 
 ;; completion: vertical list, out-of-order matching, annotations
 (use-package vertico
@@ -122,7 +196,10 @@
 
 ;; git
 (use-package magit
-  :ensure t)
+  :ensure t
+  :config
+  ;; k is meow's move-up, so discard/delete lives on x (was magit-reset-quickly)
+  (keymap-set magit-mode-map "x" #'magit-discard))
 
 ;; gitsigns
 (use-package diff-hl
@@ -145,35 +222,6 @@
 (keymap-global-set "C-c c" #'org-capture)
 (keymap-global-set "C-x C-b" #'ibuffer)
 (keymap-global-set "C-x b" #'consult-buffer)
-
-(use-package general
-  :ensure t
-  :after evil
-  :config
-  (general-create-definer my/leader
-    :states '(normal visual motion)
-    :keymaps 'override
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (my/leader "p p" '(project-switch-project :which-key "switch project"))
-  (my/leader "p b" '(consult-project-buffer :which-key "show project buffers"))
-  (my/leader "p f" '(project-find-file :which-key "find project file"))
-  (my/leader "p s" '(consult-ripgrep :which-key "search project files"))
-  (my/leader "g s" '(magit :which-key "magit"))
-  (my/leader "g r" '(lsp-find-references :which-key "find references"))
-  (my/leader "g i" '(lsp-find-implementation :which-key "find implementation"))
-  (my/leader "j" '(next-error :which-key "next result"))
-  (my/leader "k" '(previous-error :which-key "previous result"))
-  (my/leader "]" '(flymake-goto-next-error :which-key "next diagnostic"))
-  (my/leader "[" '(flymake-goto-prev-error :which-key "prev diagnostic"))
-  (my/leader "e" '(display-local-help :which-key "show diagnostic"))
-  )
-
-(use-package evil-ghostel
-  :ensure t
-  :after
-  (evil ghostel))
 
 ;; ibuffer
 (use-package ibuffer
@@ -211,14 +259,6 @@
       "* TODO %?\n%U\n%a")
      ("n" "Note" entry (file "inbox.org")
       "* %?\n%U"))))
-
-(use-package evil-org
-  :ensure t
-  :after org
-  :hook (org-mode . evil-org-mode)
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
 
 ; claude
 (use-package claude-code-ide

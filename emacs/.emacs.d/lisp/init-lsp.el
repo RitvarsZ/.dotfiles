@@ -52,8 +52,8 @@
   (define-derived-mode my/vue-mode web-mode "Vue")
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . my/vue-mode)))
 
-;; K shows LSP docs for the symbol at point in a popup (child frame);
-;; K again jumps into the popup to scroll/search/yank, q or ESC closes it
+;; SPC d shows LSP docs for the symbol at point in a popup (child frame);
+;; SPC d again jumps into the popup to scroll/search/yank, q closes it
 (defun my/lsp-doc-K ()
   (interactive)
   (if (lsp-ui-doc--frame-visible-p)
@@ -64,9 +64,6 @@
   (interactive)
   (lsp-ui-doc-unfocus-frame)
   (lsp-ui-doc-hide))
-
-(defun my/lsp-lookup-setup ()
-  (setq-local evil-lookup-func #'my/lsp-doc-K))
 
 (use-package lsp-mode
   :ensure t
@@ -81,8 +78,7 @@
    (my/vue-mode . lsp-deferred)
    (typescript-ts-mode . lsp-deferred)
    (tsx-ts-mode . lsp-deferred)
-   (lsp-mode . lsp-enable-which-key-integration)
-   (lsp-mode . my/lsp-lookup-setup))
+   (lsp-mode . lsp-enable-which-key-integration))
   :config
   ;; don't file-watch composer deps (still indexed, they just aren't watched)
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
@@ -99,7 +95,7 @@
                     vue-semantic-server))  ; @vue/language-server
     (lsp-ensure-server server)))
 
-;; popup docs; only on demand via K (closes when the cursor moves)
+;; popup docs; only on demand via SPC d (closes when the cursor moves)
 (use-package lsp-ui
   :ensure t
   :after lsp-mode
@@ -110,11 +106,9 @@
   (lsp-ui-doc-position 'at-point)
   (lsp-ui-sideline-enable nil)          ; no inline diagnostics/code actions noise
   :config
-  ;; inside the focused popup (evil state maps beat plain minor-mode maps)
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal lsp-ui-doc-frame-mode-map
-      (kbd "q")   #'my/lsp-doc-close
-      (kbd "ESC") #'my/lsp-doc-close)))
+  ;; inside the focused popup: MOTION state so j/k scroll and q reaches this map
+  (keymap-set lsp-ui-doc-frame-mode-map "q" #'my/lsp-doc-close)
+  (add-hook 'lsp-ui-doc-frame-mode-hook #'meow-motion-mode))
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here

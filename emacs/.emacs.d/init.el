@@ -112,7 +112,8 @@
    '("g r" . lsp-find-references)
    '("g d" . lsp-find-definition)
    '("g i" . lsp-find-implementation)
-   '("d" . my/lsp-doc-K)
+   '("d" . lsp-ui-doc-glance)
+   '("D" . lsp-ui-doc-focus-frame)
    '("j" . next-error)
    '("k" . previous-error)
    '("]" . flymake-goto-next-error)
@@ -258,6 +259,20 @@
 ;; terminal-emulator
 (use-package ghostel
   :ensure t)
+
+(add-to-list 'trusted-content "~/.dotfiles/")
+(add-to-list 'trusted-content (abbreviate-file-name user-emacs-directory))
+(use-package elisp-mode
+  :ensure nil
+  :custom
+  ;; compile with my packages + modules visible, so require/use-package resolve
+  (elisp-flymake-byte-compile-load-path (cons "./" load-path))
+  :hook
+  (emacs-lisp-mode . (lambda ()
+                       ;; checkdoc nags about docstrings/headers; byte-compile only
+                       (remove-hook 'flymake-diagnostic-functions
+                                    #'elisp-flymake-checkdoc t)
+                       (flymake-mode 1))))
 
 ;; lsp (corfu, php-ts-mode, lsp-mode + intelephense)
 (require 'init-lsp)

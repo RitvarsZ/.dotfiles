@@ -53,19 +53,6 @@
   (define-derived-mode my/vue-mode web-mode "Vue")
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . my/vue-mode)))
 
-;; SPC d shows LSP docs for the symbol at point in a popup (child frame);
-;; SPC d again jumps into the popup to scroll/search/yank, q closes it
-(defun my/lsp-doc-K ()
-  (interactive)
-  (if (lsp-ui-doc--frame-visible-p)
-      (lsp-ui-doc-focus-frame)
-    (lsp-ui-doc-glance)))
-
-(defun my/lsp-doc-close ()
-  (interactive)
-  (lsp-ui-doc-unfocus-frame)
-  (lsp-ui-doc-hide))
-
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
@@ -101,15 +88,11 @@
   :ensure t
   :after lsp-mode
   :custom
-  (lsp-ui-doc-enable nil)               ; no auto hover popups
+  (lsp-ui-doc-enable t)               ; no auto hover popups
   (lsp-ui-doc-show-with-cursor nil)
   (lsp-ui-doc-show-with-mouse nil)
   (lsp-ui-doc-position 'at-point)
-  (lsp-ui-sideline-enable nil)          ; no inline diagnostics/code actions noise
-  :config
-  ;; inside the focused popup: MOTION state so j/k scroll and q reaches this map
-  (keymap-set lsp-ui-doc-frame-mode-map "q" #'my/lsp-doc-close)
-  (add-hook 'lsp-ui-doc-frame-mode-hook #'meow-motion-mode))
+  (lsp-ui-sideline-enable nil))         ; no inline diagnostics/code actions noise
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here

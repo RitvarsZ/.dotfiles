@@ -19,9 +19,9 @@
 ;; extra config modules live in ~/.emacs.d/lisp/
 (add-to-list 'load-path (locate-user-emacs-file "lisp"))
 
-;; font: size scales with the monitor's pixel height (26 at 1440p, 20 at 1080p)
+;; font: size scales with the monitor's pixel height
 (defvar my/font-family "JetBrainsMono Nerd Font")
-(defvar my/font-size-at-1440p 26)
+(defvar my/font-size-at-1440p 24)
 
 (defun my/font-size-for-frame (frame)
   (let ((height (nth 3 (frame-monitor-attribute 'geometry frame))))

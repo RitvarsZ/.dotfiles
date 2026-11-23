@@ -285,7 +285,7 @@
   (org-capture-templates
    '(("t" "Todo" entry (file "inbox.org")
       "* TODO %?\n%U\n%a")
-     ("n" "Note" entry (file "inbox.org")
+     ("n" "Note" entry (file "notes.org")
       "* %?\n%U"))))
 
 ; claude

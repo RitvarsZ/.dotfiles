@@ -79,11 +79,12 @@
   :demand t
   :custom
   (meow-use-clipboard t)
-  ;; SPC g ... is my leader prefix, not C-M- (SPC m still gives M-)
   (meow-keypad-ctrl-meta-prefix nil)
   :config
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   (set-face-attribute 'meow-cheatsheet-command nil :height 1.0)
+  (setq meow-use-cursor-position-hack t
+      meow-use-enhanced-selection-effect t)
   ;; meow-undo replays this key; C-/ is rebound to comment-line below
   (setq meow--kbd-undo "C-_")
   (meow-motion-overwrite-define-key
@@ -251,8 +252,6 @@
 ;; modeline
 (use-package doom-modeline
   :ensure t
-  :custom
-  (doom-modeline-project-name t)   ; show current project.el project
   :init
   (doom-modeline-mode 1))
 

@@ -72,7 +72,7 @@
   (set-face-attribute 'meow-cheatsheet-command nil :height 1.0)
   ;; meow-undo replays this key; C-/ is rebound to comment-line below
   (setq meow--kbd-undo "C-_")
-  (meow-motion-define-key
+  (meow-motion-overwrite-define-key
    '("j" . meow-next)
    '("k" . meow-prev)
    '("<escape>" . ignore))

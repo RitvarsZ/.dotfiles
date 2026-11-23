@@ -14,7 +14,7 @@
   (global-corfu-mode 1))
 
 ;; PHP: built-in tree-sitter mode (Emacs 30+)
-;; grammars: M-x php-ts-mode-install-parsers (once)
+;; grammars: M-x php-ts-mode-install-parsers (once; only defined after php-ts-mode loads)
 ;; color variables and full `use' paths as one token each, $this as a keyword (like PhpStorm)
 (defun my/php-uniform-font-lock ()
   (setq-local treesit-font-lock-settings
@@ -34,12 +34,13 @@
   :mode "\\.php\\'"
   :hook (php-ts-mode . my/php-uniform-font-lock))
 
-;; TypeScript: built-in tree-sitter modes; grammars installed on first start
+;; TypeScript: built-in tree-sitter modes; grammars installed on first .ts/.tsx open
+;; (:config, not :init: the grammar recipes are only registered once the mode loads)
 (use-package typescript-ts-mode
   :ensure nil
   :mode (("\\.[cm]?ts\\'" . typescript-ts-mode)
          ("\\.tsx\\'"     . tsx-ts-mode))
-  :init
+  :config
   (dolist (lang '(typescript tsx))
     (unless (treesit-language-available-p lang)
       (treesit-install-language-grammar lang))))

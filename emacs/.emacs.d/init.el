@@ -19,9 +19,23 @@
 ;; extra config modules live in ~/.emacs.d/lisp/
 (add-to-list 'load-path (locate-user-emacs-file "lisp"))
 
-;; font
-(add-to-list 'default-frame-alist
-	'(font . "JetBrainsMono Nerd Font-26"))
+;; font: size scales with the monitor's pixel height (26 at 1440p, 20 at 1080p)
+(defvar my/font-family "JetBrainsMono Nerd Font")
+(defvar my/font-size-at-1440p 26)
+
+(defun my/font-size-for-frame (frame)
+  (let ((height (nth 3 (frame-monitor-attribute 'geometry frame))))
+    (round (* my/font-size-at-1440p (/ height 1440.0)))))
+
+(defun my/set-font-for-frame (&optional frame)
+  "Set FRAME's font size to suit the monitor it is on."
+  (let ((frame (or frame (selected-frame))))
+    (when (display-graphic-p frame)
+      (set-frame-font (format "%s-%d" my/font-family (my/font-size-for-frame frame))
+                      t (list frame)))))
+
+(add-hook 'window-setup-hook #'my/set-font-for-frame)          ; initial frame
+(add-hook 'after-make-frame-functions #'my/set-font-for-frame) ; new frames, emacsclient -c
 
 ;; hide bs
 (scroll-bar-mode 0)

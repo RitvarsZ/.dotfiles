@@ -65,6 +65,7 @@
   ((php-ts-mode . lsp-deferred)
    (my/vue-mode . lsp-deferred)
    (typescript-ts-mode . lsp-deferred)
+   (js-mode . lsp-deferred)                ; not `javascript-mode': that's an alias, its hook never runs
    (tsx-ts-mode . lsp-deferred)
    (lsp-mode . lsp-enable-which-key-integration))
   :config

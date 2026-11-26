@@ -58,6 +58,9 @@
 (setq dired-kill-when-opening-new-dired-buffer t)
 (which-key-mode 1)
 (savehist-mode 1)
+(setq-default truncate-lines t)
+(editorconfig-mode 1)
+(setq-default indent-tabs-mode nil)
 
 ;; move backups and auto saves out of sight
 (setq backup-directory-alist `(("." . ,(locate-user-emacs-file "backups")))
@@ -84,7 +87,8 @@
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   (set-face-attribute 'meow-cheatsheet-command nil :height 1.0)
   (setq meow-use-cursor-position-hack t
-      meow-use-enhanced-selection-effect t)
+      meow-use-enhanced-selection-effect t
+      meow-expand-hint-counts nil)
   ;; meow-undo replays this key; C-/ is rebound to comment-line below
   (setq meow--kbd-undo "C-_")
   (meow-motion-overwrite-define-key
@@ -108,11 +112,17 @@
    '("p p" . project-switch-project)
    '("p b" . consult-project-buffer)
    '("p f" . project-find-file)
+   '("p t t" . ghostel-project)
+   '("p t RET" . ghostel-project-new)
+   '("p t b" . consult-ghostel-project)
    '("p s" . consult-ripgrep)
    '("g s" . magit)
    '("g r" . lsp-find-references)
    '("g d" . lsp-find-definition)
    '("g i" . lsp-find-implementation)
+   '("t t" . ghostel)
+   '("t RET" . ghostel-new)
+   '("t b" . consult-ghostel)
    '("d" . lsp-ui-doc-glance)
    '("D" . lsp-ui-doc-focus-frame)
    '("j" . next-error)
@@ -258,6 +268,13 @@
 ;; terminal-emulator
 (use-package ghostel
   :ensure t)
+(use-package consult-ghostel
+  :after (ghostel consult)
+  :ensure t
+  :demand t
+  :config (consult-ghostel-mode)
+  :bind (:map ghostel-semi-char-mode-map
+         ("C-c h" . consult-ghostel-history)))
 
 (add-to-list 'trusted-content "~/.dotfiles/")
 (add-to-list 'trusted-content (abbreviate-file-name user-emacs-directory))
